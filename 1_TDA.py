@@ -45,7 +45,7 @@ def perform_TDA(data, labels, NR, PO, n_clusters, filt="knn_distance_2", save_st
     """
 
     # Step 1. initiate a Mapper
-    mapper = km.KeplerMapper(verbose=0)
+    mapper = km.KeplerMapper(verbose=2)
 
     # Step 2. Projection
     projected_data = mapper.fit_transform(data, projection=filt)
@@ -81,33 +81,20 @@ if __name__ == "__main__":
     with open(os.path.join(path_to_data, "info.txt")) as json_file:
         meta_info = json.load(json_file)
 
-    # load train dataset, gestures labels, subject labels
-    X = np.load(os.path.join(path_to_data, "split/X_train.npy"))
-    y_g = np.load(os.path.join(path_to_data, "split/y_g_train.npy"))
-    if (meta_info['num_subjects'] > 1):
-        y_s = np.load(os.path.join(path_to_data, "split/y_s_train.npy"))
+    # load features
+    features = np.load(os.path.join(
+        path_to_data, "TDA_data/features_train.npy"))
 
-    # perform feature extraction (n x t x c) --> (f x n x c), (f,)
-    features, feature_labels = extract_features(X, drop_constants=True)
+    with open(os.path.join(path_to_data, "TDA_data/feature_labels_train.txt"), 'r') as f:
+        feature_labels = [line.rstrip('\n') for line in f]
 
-    # perform feature scaling (per channel) so that each feature has zero mean and unit variance
-    # TODO: on sets with multiple subjects, perform feature scaling per subject
-    feature_mean = np.mean(features, axis=1).reshape(
-        (features.shape[0], 1, -1))
-    feature_std = np.std(features, axis=1).reshape((features.shape[0], 1, -1))
-    features_scaled = np.subtract(features, feature_mean) / feature_std
-
-    # reshape array to be two-dimensional
-    features_reshape = features_scaled.reshape((features.shape[0], -1))
-    print("features_reshape.shape", features_reshape.shape)
-
-    # TODO: on bigger sets, run PCA (f x n x c) --> (f x p)
+    print(feature_labels)
 
     # run topographic analysis
-    NR = 2
-    PO = 0.75
-    n_clusters = 3
+    NR = 5
+    PO = 0.30
+    n_clusters = 4
     save_string = os.path.join(
         path_to_data, "TDA_{}_{}_{}".format(NR, PO, n_clusters))
-    perform_TDA(features_reshape, feature_labels, NR, PO, n_clusters,
+    perform_TDA(features, feature_labels, NR, PO, n_clusters,
                 save_string=save_string, title=save_string)
