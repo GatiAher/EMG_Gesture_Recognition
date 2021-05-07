@@ -80,7 +80,7 @@ def get_feature_labels():
     feature_labels = [
         "MAV",
         "RMS",
-        "SSC",  # zero
+        # "SSC",  # zero
         "WL",
         "HP_A",
         "HP_M",
@@ -110,7 +110,7 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     feature_labels = [
         "MAV",
         "RMS",
-        "SSC",  # zero
+        # "SSC",  # zero
         "WL",
         "HP_A",
         "HP_M",
@@ -127,7 +127,7 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     features_f = [
         MAV(data_r),
         RMS(data_r),
-        SSC(data_r),  # zero
+        # SSC(data_r),  # zero
         WL(data_r),
         HP_A(data_r),
         HP_M(data_r),
@@ -147,7 +147,8 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
 
     # remove any columns with constant values across all samples
     drop_idx = list(set(np.argwhere(np.std(features, axis=1) == 0)[:, 0]))
-    print("WARNING: constant features", drop_idx)
+    if (drop_idx):
+        print("WARNING: constant features", drop_idx)
 
     if(drop_constants):
         # reverse to pop multiple items without issues
@@ -158,3 +159,48 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
             feature_labels.pop(i)
 
     return features, feature_labels
+
+
+def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose=False):
+    """
+    Return a feature matrix of shape (f x (n x w) x c)
+
+    Args:
+        X: ndarray (n x t x c)
+
+    Return
+        features: (f x (n x w) x c)
+        feature_labels: (f,)
+        n_windows: (int) number of windows
+    """
+    # number of time points in window
+    window_span = int(sampling_rate_Hz * window_span_sec)
+    # number of time points to shift window by
+    window_incr = int(sampling_rate_Hz * window_incr_sec)
+    # number of analysis segments
+    n_windows = int((X.shape[1] - window_span) // window_incr) + 1
+    print("number of analysis segments:", n_windows)
+
+    feature_labels = extract_features(None, only_return_labels=True)
+    features = np.zeros(
+        (len(feature_labels), X.shape[0] * n_windows, X.shape[2])
+    )
+
+    # sliding windows
+    i = 0
+    for e in range(window_span, X.shape[1], window_incr):
+        s = e - window_incr
+        fm, _ = extract_features(X[:, s:e, :])
+        features[:, i:i+fm.shape[1], :] = fm
+        if (verbose):
+            print("\n----\n \t mean \t std ")
+            for f, flabel in enumerate(feature_labels):
+                for c in range(fm.shape[2]):
+                    print(flabel + str(c), np.mean(features[f, i:i+X.shape[0], c]),
+                          np.std(features[f, i:i+X.shape[0], c]))
+        i += X.shape[0]
+
+    # replace nans
+    np.nan_to_num(features, copy=False)
+
+    return features, feature_labels, n_windows

@@ -11,56 +11,15 @@ import json
 import numpy as np
 import pandas as pd
 
-from extract_features import extract_features
+from extract_features import moving_window
 
 from sklearn.metrics import davies_bouldin_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn import svm
 
+from sklearn.model_selection import cross_val_score
 
-def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose=False):
-    """
-    Return a feature matrix of shape (f x (n x w) x c)
-
-    Args:
-        X: ndarray (n x t x c)
-
-    Return
-        features: (f x (n x w) x c)
-        feature_labels: (f,)
-        n_windows: (int) number of windows
-    """
-    # number of time points in window
-    window_span = int(sampling_rate_Hz * window_span_sec)
-    # number of time points to shift window by
-    window_incr = int(sampling_rate_Hz * window_incr_sec)
-    # number of analysis segments
-    n_windows = int((X.shape[1] - window_span) // window_incr) + 1
-    print("number of analysis segments:", n_windows)
-
-    feature_labels = extract_features(None, only_return_labels=True)
-    features = np.zeros(
-        (len(feature_labels), X.shape[0] * n_windows, X.shape[2])
-    )
-
-    # sliding windows
-    i = 0
-    for e in range(window_span, X.shape[1], window_incr):
-        s = e - window_incr
-        fm, _ = extract_features(X[:, s:e, :])
-        features[:, i:i+fm.shape[1], :] = fm
-        if (verbose):
-            print("\n----\n \t mean \t std ")
-            for f, flabel in enumerate(feature_labels):
-                for c in range(fm.shape[2]):
-                    print(flabel + str(c), np.mean(features[f, i:i+X.shape[0], c]),
-                          np.std(features[f, i:i+X.shape[0], c]))
-        i += X.shape[0]
-
-    # replace nans
-    np.nan_to_num(features, copy=False, nan=0.0, posinf=0.0, neginf=0.0)
-
-    return features, feature_labels, n_windows
-
+RAND_SEED = 42
 
 if __name__ == "__main__":
     # TODO: parse arguments
@@ -84,32 +43,50 @@ if __name__ == "__main__":
     y_g_w = np.repeat(y_g, n_windows)
 
     # save f x DBI, FLDI, SVM, LDA, and RF to dataframe
-    df = pd.DataFrame(columns=["DBI", "FLDI", "SVM", "LDA", "RF"],
+    df = pd.DataFrame(columns=["DBI", "FLDI", "LDA_avg", "LDA_std", "SVM_avg", "SVM_std"],
                       index=feature_labels)
 
-    # for each f, calculate davies bouldin index (DBI) of (n x w) x c matrix
+    # for each f, calculate davies bouldin index(DBI) of (n x w) x c matrix
     for i, f in enumerate(feature_labels):
         df.at[f, "DBI"] = davies_bouldin_score(features[i, :, :], y_g_w)
 
     # for each f, calculate fisher's linear discriminant index (FLDI) of (n x w) x c matrix
-    N_classes = np.bincount(y_g_w)
-    print("N_classes", N_classes)
+    N_classes = np.bincount(y_g_w)[1:]
     for i, f in enumerate(feature_labels):
         clf = LinearDiscriminantAnalysis(store_covariance=True)
         clf.fit(np.squeeze(features[i, :, :]), y_g_w)
-        # within_class_cov = clf.covariance_
-        # print("within_class_cov.shape", within_class_cov.shape)
-        # between_class_cov = np.zeros(
-        #     (meta_info["num_gestures"], meta_info["num_gestures"])
-        # )
+        # get clf properties
+        within_class_cov = clf.covariance_
+        overall_mean = clf.xbar_
+        class_means = clf.means_
+        between_class_cov = np.zeros(
+            (meta_info["num_gestures"], features.shape[-1]))
+        for c in range(meta_info["num_gestures"]):
+            between_class_cov += N_classes[c] * (class_means[c] -
+                                                 overall_mean).dot((class_means[c] - overall_mean).T)
+        # get fisher's ratio
+        fishers_ratio = within_class_cov / between_class_cov
+        df.at[f, "FLDI"] = np.sum(fishers_ratio)
 
+    print(df)
 
+    # for each f, classify (n x w) x c matrix with LDA using 10 fold cross-validation
+    for i, f in enumerate(feature_labels):
+        clf = LinearDiscriminantAnalysis()
+        scores = cross_val_score(clf, features[i, :, :], y_g_w, cv=10)
+        df.at[f, "LDA_avg"] = scores.mean()
+        df.at[f, "LDA_std"] = scores.std()
 
+    print(df)
 
-        # TODO: load test dataset, labels_gestures, labels_subjects
+    # # for each f, classify (n x w) x c matrix with SVM using 10 fold cross-validation
+    # for i, f in enumerate(feature_labels):
+    #     print("on feature", f)
+    #     clf = svm.SVC(kernel='linear', C=1, random_state=RAND_SEED)
+    #     scores = cross_val_score(
+    #         clf, features[i, :, :], y_g_w, cv=3, n_jobs=-1)
+    #     df.at[f, "SVM_avg"] = scores.mean()
+    #     df.at[f, "SVM_std"] = scores.std()
 
-        # TODO: for each f, classify with SVM, LDA, and RF
-
-        # TODO: save f x DBI, FLDI, SVM, LDA, and RF to dataframe
-
-    pass
+    print(df)
+    df.to_csv(os.path.join(path_to_data, "feature_analysis.csv"))
