@@ -20,44 +20,138 @@ Return:
 AXIS = 0
 
 
-def MAV(timeseries):
-    """
-    The mean absolute value is one of the most commonly used values in sEMG signal analysis. The MAV feature is the average of the absolute values of the amplitude of the sEMG signal in the sliding window. It provides information about the muscle contraction level.
-    """
-    return np.mean(np.abs(timeseries), axis=AXIS)
+######################
+# FEATURE EXTRACTORS #
+######################
 
 
-def RMS(timeseries):
+def AFB(timeseries):
     """
-    The root mean square represents the mean power of the sEMG signal, which reflects the activity of muscles.
+    amplitude of the first burst
     """
-    return np.sqrt(np.mean(np.square(timeseries), axis=AXIS))
+    pass
 
 
-def SSC(timeseries):
+def ApEn(timeseries):
     """
-    Slope sign change indicates the frequency information of the sEMG signal.
+    approximate entropy
     """
-    return np.sum(1 * (np.diff(np.sign(timeseries), axis=AXIS) != 0), axis=AXIS)
+    pass
 
 
-def WL(timeseries):
+def SampEn(timeseries):
     """
-    Waveform length is the cumulative length of the sEMG signal waveform, which is related to waveform amplitude, frequency, and time and can be used to measure signal complexity.
+    sample entropy
     """
-    return np.sum(np.abs(np.diff(timeseries, axis=AXIS)), axis=AXIS)
+    pass
+
+
+def AR(timeseries):
+    """
+    autoregressive model
+    NOTE: returns 4 values
+    """
+    pass
+
+
+def DAR(timeseries):
+    """
+    differencing autoregressive model
+    NOTE: returns 4 values
+    """
+    pass
+
+
+def BC(timeseries):
+    """
+    box counting dimension
+    """
+    pass
+
+
+def CC(timeseries):
+    """
+    cepstrum/cepstral coefficients
+    NOTE: returns 4 values
+    """
+    pass
+
+
+def DCC(timeseries):
+    """
+    differencing cepstrum/cepstral coefficients
+    NOTE: returns 4 values
+    """
+    pass
+
+
+def CEA(timeseries):
+    """
+    critical exponent analysis
+    """
+    pass
+
+
+def DAMV(timeseries):
+    """
+    difference absolute mean value
+    """
+    pass
+
+
+def DASDV(timeseries):
+    """
+    difference absolute standard deviation value
+    """
+    pass
+
+
+def DFA(timeseries):
+    """
+    detrended fluctuation analysis
+    """
+    pass
+
+
+def DPR(timeseries):
+    """
+    maximum-to-minimum drop in power density ratio
+    """
+    pass
+
+
+def FR(timeseries):
+    """
+    frequency ratio
+    """
+    pass
+
+
+def HG(timeseries):
+    """
+    Higuchi's fractal dimension
+    """
+    pass
+
+
+def HIST(timeseries):
+    """
+    histogram
+    NOTE: returns 3 values
+    """
+    pass
 
 
 def HP_A(timeseries):
     """
-    Hjorth activity parameter represents the signal power, the variance of a time function. This can indicate the surface of power spectrum in the frequency domain.
+    Hjorth activity parameter: represents the signal power, the variance of a time function. This can indicate the surface of power spectrum in the frequency domain.
     """
     return np.var(timeseries, ddof=1, axis=AXIS)
 
 
 def HP_M(timeseries):
     """
-    Hjorth mobility parameter represents the mean frequency or the proportion of standard deviation of the power spectrum. This is defined as the square root of variance of the first derivative of the signal y(t) divided by variance of the signal y(t).
+    Hjorth mobility parameter: represents the mean frequency or the proportion of standard deviation of the power spectrum. This is defined as the square root of variance of the first derivative of the signal y(t) divided by variance of the signal y(t).
     """
     denom = HP_A(timeseries)
     return np.sqrt(HP_A(np.diff(timeseries, axis=AXIS))/denom)
@@ -65,28 +159,307 @@ def HP_M(timeseries):
 
 def HP_C(timeseries):
     """
-    Hjorth Complexity parameter represents the change in frequency. The parameter compares the signal's similarity to a pure sine wave, where the value converges to 1 if the signal is more similar.
+    Hjorth Complexity parameter: represents the change in frequency. The parameter compares the signal's similarity to a pure sine wave, where the value converges to 1 if the signal is more similar.
     """
     denom = HP_M(timeseries)
     return HP_M(np.diff(timeseries, axis=AXIS))/denom
 
 
-def get_feature_labels():
+def IEMG(timeseries):
     """
-    Return full list of feature labels
+    integrated EMG
+    """
+    pass
 
-    NOTE: Take care to update when new features are added 
+
+def KATZ(timeseries):
     """
-    feature_labels = [
-        "MAV",
-        "RMS",
-        # "SSC",  # zero
-        "WL",
-        "HP_A",
-        "HP_M",
-        "HP_C"
-    ]
-    return feature_labels
+    Katz's fractal dimension
+    """
+    pass
+
+
+def KURT(timeseries):
+    """
+    kurtosis
+    """
+    pass
+
+
+def SKEW(timeseries):
+    """
+    skewness
+    """
+    pass
+
+
+def LD(timeseries):
+    """
+    log detector
+    """
+    pass
+
+
+def DLD(timeseries):
+    """
+    differencing log detector
+    """
+    pass
+
+
+def M2(timeseries):
+    """
+    second order moment
+    """
+    pass
+
+
+def MAV(timeseries):
+    """
+    mean absolute value: one of the most commonly used values in sEMG signal analysis. The MAV feature is the average of the absolute values of the amplitude of the sEMG signal in the sliding window. It provides information about the muscle contraction level.
+    """
+    return np.mean(np.abs(timeseries), axis=AXIS)
+
+
+def MAV1(timeseries):
+    """
+    modified mean absolute value type 1
+    """
+    pass
+
+
+def MAV2(timeseries):
+    """
+    modified mean absolute value type 2
+    """
+    pass
+
+
+def MAVS(timeseries):
+    """
+    mean absolute value slope
+    """
+    pass
+
+
+def MAX(timeseries):
+    """
+    maximum amplitude
+    """
+    pass
+
+
+def MDF(timeseries):
+    """
+    median frequency
+    """
+    pass
+
+
+def MNF(timeseries):
+    """
+    mean frequency
+    """
+    pass
+
+
+def MFL(timeseries):
+    """
+    maximum fractal length
+    """
+    pass
+
+
+def MHW(timeseries):
+    """
+    multiple hamming windows
+    NOTE: returns 3 values
+    """
+    pass
+
+
+def MTW(timeseries):
+    """
+    trapezoidal windows
+    NOTE: returns 3 values
+    """
+    pass
+
+
+def MNP(timeseries):
+    """
+    mean power
+    """
+    pass
+
+
+def TTP(timeseries):
+    """
+    total power
+    """
+    pass
+
+
+def MYOP(timeseries):
+    """
+    myopulse percentage rate
+    """
+    pass
+
+
+def OHM(timeseries):
+    """
+    power spectrum deformation
+    """
+    pass
+
+
+def PKF(timeseries):
+    """
+    peak frequency
+    """
+    pass
+
+
+def PSDFD(timeseries):
+    """
+    power spectral density fractal dimension
+    """
+    pass
+
+
+def PSR(timeseries):
+    """
+    power spectrum ratio
+    """
+    pass
+
+
+def RMS(timeseries):
+    """
+    root mean square: represents the mean power of the sEMG signal, which reflects the activity of muscles.
+    """
+    return np.sqrt(np.mean(np.square(timeseries), axis=AXIS))
+
+
+def SM(timeseries):
+    """
+    spectral moment
+    """
+    pass
+
+
+def SMR(timeseries):
+    """
+    signal-to-motion artefact ratio
+    """
+    pass
+
+
+def SNR(timeseries):
+    """
+    signal-to-noise ratio
+    """
+    pass
+
+
+def SSC(timeseries):
+    """
+    slope sign change: indicates the frequency information of the sEMG signal.
+    """
+    return np.sum(1 * (np.diff(np.sign(timeseries), axis=AXIS) != 0), axis=AXIS)
+
+
+def SSI(timeseries):
+    """
+    simple square integral
+    """
+    pass
+
+
+def TDPSD(timeseries):
+    """
+    time-dependent power spectrum descriptors
+    NOTE: returns 6 values
+    """
+    pass
+
+
+def TM(timeseries):
+    """
+    absolute temporal moment
+    """
+    pass
+
+
+def DTM(timeseries):
+    """
+    differencing absolute temporal moment
+    """
+    pass
+
+
+def VAR(timeseries):
+    """
+    variance
+    """
+    pass
+
+
+def DVARV(timeseries):
+    """
+    differencing variance
+    """
+    pass
+
+
+def VCF(timeseries):
+    """
+    variance of central frequency
+    """
+    pass
+
+
+def VFD(timeseries):
+    """
+    variance fractal dimension
+    """
+    pass
+
+
+def V(timeseries):
+    """
+    v-order
+    """
+    pass
+
+
+def DV(timeseries):
+    """
+    differencing v-order
+    """
+    pass
+
+
+def WAMP(timeseries):
+    """
+    Wilson amplitude
+    """
+    pass
+
+
+def WL(timeseries):
+    """
+    waveform length: the cumulative length of the sEMG signal waveform, which is related to waveform amplitude, frequency, and time and can be used to measure signal complexity.
+    """
+    return np.sum(np.abs(np.diff(timeseries, axis=AXIS)), axis=AXIS)
+
+
+def ZC(timeseries):
+    """
+    zero crossing
+    """
+    pass
 
 
 def extract_features(data, only_return_labels=False, verbose=False, drop_constants=False):
