@@ -364,7 +364,7 @@ def getHIST(vector, bins=3):
     histogram
     NOTE: returns 3 values
     """
-    hist, bin_edges = np.histogram(vector, bins)
+    hist, _ = np.histogram(vector, bins)
     return hist.tolist()
 
 
