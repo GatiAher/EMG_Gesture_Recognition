@@ -66,7 +66,8 @@ def perform_feature_evaluation(features, feature_labels, y_g_w, num_gestures, sa
     # for each f, classify (n x w) x c matrix with SVM using cross-validation
     for i, f in enumerate(feature_labels):
         print("on feature", f)
-        clf = svm.SVC(kernel='linear', C=0.5, random_state=RAND_SEED)
+        clf = svm.SVC(kernel='linear', decision_function_shape='ovo',
+                      C=0.5, random_state=RAND_SEED)
         scores = cross_val_score(
             clf, features[i, :, :], y_g_w, cv=5, n_jobs=-1)
         df.at[f, "SVM_avg"] = scores.mean()
