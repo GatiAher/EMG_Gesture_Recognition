@@ -11,6 +11,8 @@ from scipy import stats
 import sampen
 import math
 
+import sys
+
 
 def cmp(a, b):
     """
@@ -245,24 +247,29 @@ def getDV(vector):
 def getSampEn(vector, m=2, r_multiply_by_sigma=.2):
     """
     sample entropy
-    NOTE: returns multiple values
+    NOTE: returns 3 values
     """
     vector = np.asarray(vector)
     r = r_multiply_by_sigma * np.std(vector)
-    results = sampen.sampen2(data=vector.tolist(), mm=m, r=r)
+    try:
+        results = sampen.sampen2(data=vector.tolist(), mm=m, r=r)
+    except:
+        return [0.0, 0.0, 0.0]
+
     results_SampEN = []
     for x in np.array(results)[:, 1]:
         if x is not None:
             results_SampEN.append(x)
         else:
             results_SampEN.append(-100.)
+
     return list(results_SampEN)
 
 
 def getAR(vector, order=4):
     """
     autoregressive model
-    NOTE: returns 4 values
+    NOTE: returns 5 values
     """
     # Using Levinson Durbin prediction algorithm, get autoregressive coefficients
     # Square signal
@@ -290,12 +297,17 @@ def getAR(vector, order=4):
 def getDAR(vector):
     """
     differencing autoregressive model
-    NOTE: returns 4 values
+    NOTE: returns 5 values
     """
     # Get the first difference of the vector
     vector_diff = np.diff(vector)
     # Calculate the AR coefficient on it
-    return getAR(vector_diff, order=4)
+    AR = getAR(vector_diff, order=4)
+    if (len(AR) < 5):
+        vals = np.zeros((5, ))
+        vals[:-1] = getAR(vector_diff, order=4)
+        return vals
+    return AR
 
 
 def getBC(vector):
@@ -314,8 +326,13 @@ def getBC(vector):
             min_dat = np.min(vector[int(r[k]*i):int(r[k]*(i+1))])
             box_r[i] = np.ceil((max_dat-min_dat)/r[k])
         Nr[k] = np.sum(box_r)
-    bc_poly = np.polyfit(np.log2(1/r), np.log2(Nr), 1)
-    return bc_poly[0]
+
+    try:
+        bc_poly = np.polyfit(np.log2(1/r), np.log2(Nr), 1)
+        val = bc_poly[0]
+    except:
+        return 0
+    return val
 
 
 def getCC(vector, order=4):
@@ -477,7 +494,11 @@ def getMFL(vector):
     """
     maximum fractal length
     """
-    return np.log10(np.sum(abs(np.diff(vector))))
+    try:
+        val = np.log10(np.sum(abs(np.diff(vector))))
+    except:
+        return 0
+    return val
 
 
 def getMNF(vector, fs=500):
@@ -647,6 +668,29 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     """
 
     feature_labels = [
+        "SampEn(1)",  # multiple
+        "SampEn(2)",
+        "SampEn(3)",
+        "IQR(start)",  # multiple
+        "IQR(end)",
+        "HIST(1)",  # multiple
+        "HIST(2)",
+        "HIST(3)",
+        # "DAR(1)", # always 1
+        "DAR(2)",   # multiple
+        "DAR(3)",
+        "DAR(4)",
+        "DAR(5)",
+        # "AR(1)",  # always 1
+        "AR(2)",    # multiple
+        "AR(3)",
+        "AR(4)",
+        "AR(5)",
+        # "CC(1)",  # always 1
+        "CC(2)",    # multiple
+        "CC(3)",
+        "CC(4)",
+        "CC(5)",
         "BC",
         "DASDV",
         "HP_A",
@@ -666,21 +710,15 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
         # "MYOP", # constant
         "RMS",
         "SM",
-        "SSC",
+        # "SSC", # constant
         "SSI",
         "STD",
         "TM",
         "TTP",
         "VAR",
-        "WAMP",
+        # "WAMP",
         "WL",
         # "ZC", # constant
-        # "SampEn", # multiple
-        # "IQR", # multiple
-        # "HIST", # multiple
-        # "DAR", # multiple?
-        # "AR",  # multiple
-        # "CC",  # multiple
     ]
 
     if (only_return_labels):
@@ -692,9 +730,20 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     # (n x c x f)
     res = []
     for n in range(data_r.shape[0]):
+        print("\tfinished {}/{}".format(n, data_r.shape[0]))
         n_arr = []
         for c in range(data_r.shape[1]):
             c_arr = []
+
+            # multiple value features
+            c_arr.extend(getSampEn(data_r[n, c, :]))
+            c_arr.extend(getIQR(data_r[n, c, :]))
+            c_arr.extend(getHIST(data_r[n, c, :]))
+            c_arr.extend(getDAR(data_r[n, c, :]))
+            c_arr.extend(getAR(data_r[n, c, :]))
+            c_arr.extend(getCC(data_r[n, c, :]))
+
+            # single value features
             c_arr.append(getBC(data_r[n, c, :]))
             c_arr.append(getDASDV(data_r[n, c, :]))
             c_arr.append(getHP_A(data_r[n, c, :]))
@@ -714,16 +763,19 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
             # c_arr.append(getMYOP(data_r[n, c, :]))
             c_arr.append(getRMS(data_r[n, c, :]))
             c_arr.append(getSM(data_r[n, c, :]))
-            c_arr.append(getSSC(data_r[n, c, :]))
+            # c_arr.append(getSSC(data_r[n, c, :]))
             c_arr.append(getSSI(data_r[n, c, :]))
             c_arr.append(getSTD(data_r[n, c, :]))
             c_arr.append(getTM(data_r[n, c, :]))
             c_arr.append(getTTP(data_r[n, c, :]))
             c_arr.append(getVAR(data_r[n, c, :]))
-            c_arr.append(getWAMP(data_r[n, c, :]))
+            # c_arr.append(getWAMP(data_r[n, c, :]))
             c_arr.append(getWL(data_r[n, c, :]))
             # c_arr.append(getZC(data_r[n, c, :]))
+
             c_narr = np.array(c_arr)
+            np.nan_to_num(c_narr, copy=False)
+
             n_arr.append(c_narr)
         n_narr = np.array(n_arr)
         res.append(n_narr)
@@ -733,7 +785,15 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     features = np.moveaxis(features, -1, 0)
     features = np.real(features)
 
-    # if (verbose):
+    # remove known constant features (first AR coef always 1)
+    # reverse to pop multiple items without issues
+    drop_idx = [18, 13, 8]
+    drop_idx = list(set(drop_idx))
+    drop_idx.sort(reverse=True)
+    if(drop_idx):
+        features = np.delete(features, drop_idx, axis=0)
+
+    # check for constant features
     drop_idx = []
     drop_flabels = []
     print("features.shape", features.shape)
@@ -791,8 +851,10 @@ def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose
 
     # sliding windows
     i = 0
-    for e in range(window_span, X.shape[1], window_incr):
+    w = 0
+    for e in range(window_span, X.shape[1] + 1, window_incr):
         s = e - window_incr
+        print("window {}/{}".format(w, n_windows))
         fm, _ = extract_features(X[:, s:e, :])
         features[:, i:i+fm.shape[1], :] = fm
         if (verbose):
@@ -801,6 +863,7 @@ def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose
                 for c in range(fm.shape[2]):
                     print(flabel + str(c), np.mean(features[f, i:i+X.shape[0], c]),
                           np.std(features[f, i:i+X.shape[0], c]))
+        w += 1
         i += X.shape[0]
 
     # replace nans

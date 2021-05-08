@@ -63,8 +63,10 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(
         X, labels_gestures, stratify=labels_gestures, test_size=30, random_state=RAND_SEED)
 
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_train, y_train, stratify=y_train, test_size=30, random_state=RAND_SEED)
+    # mean center the data, by channel
+    X_train_mean = np.mean(X_train, axis=(0, 1)).reshape((1, 1, -1))
+    X_train = np.subtract(X_train, X_train_mean)
+    X_test = np.subtract(X_test, X_train_mean)
 
     # verify data has right dimensions
     print("X_train.shape", X_train.shape, "y_train.shape", y_train.shape)
@@ -73,14 +75,10 @@ if __name__ == "__main__":
     print("X_test.shape", X_test.shape, "y_test.shape", y_test.shape)
     print("test: # of each gesture", np.bincount(y_test[:, 0]))
     print()
-    print("X_val.shape", X_val.shape, "y_val.shape", y_val.shape)
-    print("val: # of each gesture", np.bincount(y_val[:, 0]))
 
     # save dataset
     np.save(os.path.join(SPLIT_SAVE, "X_train.npy"), X_train)
     np.save(os.path.join(SPLIT_SAVE, "X_test.npy"), X_test)
-    np.save(os.path.join(SPLIT_SAVE, "X_val.npy"), X_val)
 
     np.save(os.path.join(SPLIT_SAVE, "y_g_train.npy"), y_train)
     np.save(os.path.join(SPLIT_SAVE, "y_g_test.npy"), y_test)
-    np.save(os.path.join(SPLIT_SAVE, "y_g_val.npy"), y_val)

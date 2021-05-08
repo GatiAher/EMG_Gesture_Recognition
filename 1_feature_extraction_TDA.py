@@ -51,9 +51,19 @@ if __name__ == "__main__":
     print("features_reshape.shape", features_reshape.shape)
 
     # save feature files
-    np.save(os.path.join(path_to_data, "TDA_data/features_train.npy"),
+    feature_train_save = os.path.join(
+        path_to_data, "TDA_data/features_train.npy")
+    np.save(feature_train_save,
             features_reshape)
-    with open(os.path.join(path_to_data, "TDA_data/feature_labels_train.txt"), 'w', newline='') as f:
+    print("saved features to ", feature_train_save,
+          "shape", features_reshape.shape)
+
+    feature_train_labels_save = os.path.join(
+        path_to_data, "TDA_data/feature_labels_train.txt")
+    with open(feature_train_labels_save, 'w', newline='') as f:
         for l in feature_labels:
             f.write(l)
             f.write('\n')
+    print("saved feature labels to ",
+          feature_train_labels_save, "len", len(feature_labels))
+

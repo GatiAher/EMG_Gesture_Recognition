@@ -19,31 +19,14 @@ from sklearn import svm
 
 from sklearn.model_selection import cross_val_score
 
+from matplotlib import pyplot as plt
+
 RAND_SEED = 42
 
-if __name__ == "__main__":
-    # TODO: parse arguments
-    path_to_data = "data/junipersun/"
 
-    # load meta data
-    with open(os.path.join(path_to_data, "info.txt")) as json_file:
-        meta_info = json.load(json_file)
-
-    # load train dataset, gestures labels, subject labels
-    X = np.load(os.path.join(path_to_data, "split/X_train.npy"))
-    y_g = np.load(os.path.join(path_to_data, "split/y_g_train.npy"))
-    if (meta_info['num_subjects'] > 1):
-        y_s = np.load(os.path.join(path_to_data, "split/y_s_train.npy"))
-
-    # segment into overlapping windows, n = n x w analysis segments
-    # perform feature extraction (n x t x c) -->  (f x (n x w) x c), (f,)
-    # 200 ms with 100 ms overlap gives whole numbers
-    features, feature_labels, n_windows = moving_window(
-        X, meta_info["sampling_rate"], 0.2, 0.1)
-    y_g_w = np.repeat(y_g, n_windows)
-
+def perform_feature_evaluation(features, feature_labels, y_g_w, num_gestures, save_to):
     # save f x DBI, FLDI, SVM, LDA, and RF to dataframe
-    df = pd.DataFrame(columns=["DBI", "FLDI", "LDA_avg", "LDA_std", "SVM_avg", "SVM_std"],
+    df = pd.DataFrame(columns=["DBI", "FLDI", "LDA_avg", "LDA_std", "LDA_max", "SVM_avg", "SVM_std", "SVM_max"],
                       index=feature_labels)
 
     # for each f, calculate davies bouldin index(DBI) of (n x w) x c matrix
@@ -70,23 +53,68 @@ if __name__ == "__main__":
 
     print(df)
 
-    # for each f, classify (n x w) x c matrix with LDA using 10 fold cross-validation
+    # for each f, classify (n x w) x c matrix with LDA using cross-validation
     for i, f in enumerate(feature_labels):
         clf = LinearDiscriminantAnalysis()
-        scores = cross_val_score(clf, features[i, :, :], y_g_w, cv=10)
+        scores = cross_val_score(clf, features[i, :, :], y_g_w, cv=5)
         df.at[f, "LDA_avg"] = scores.mean()
         df.at[f, "LDA_std"] = scores.std()
+        df.at[f, "LDA_max"] = max(scores)
 
     print(df)
 
-    # # for each f, classify (n x w) x c matrix with SVM using 10 fold cross-validation
-    # for i, f in enumerate(feature_labels):
-    #     print("on feature", f)
-    #     clf = svm.SVC(kernel='linear', C=1, random_state=RAND_SEED)
-    #     scores = cross_val_score(
-    #         clf, features[i, :, :], y_g_w, cv=3, n_jobs=-1)
-    #     df.at[f, "SVM_avg"] = scores.mean()
-    #     df.at[f, "SVM_std"] = scores.std()
+    # for each f, classify (n x w) x c matrix with SVM using cross-validation
+    for i, f in enumerate(feature_labels):
+        print("on feature", f)
+        clf = svm.SVC(kernel='linear', C=0.5, random_state=RAND_SEED)
+        scores = cross_val_score(
+            clf, features[i, :, :], y_g_w, cv=5, n_jobs=-1)
+        df.at[f, "SVM_avg"] = scores.mean()
+        df.at[f, "SVM_std"] = scores.std()
+        df.at[f, "SVM_max"] = max(scores)
 
     print(df)
-    df.to_csv(os.path.join(path_to_data, "feature_analysis.csv"))
+    df.to_csv(dataframe_save)
+
+
+if __name__ == "__main__":
+    # TODO: parse arguments
+    path_to_data = "data/junipersun/"
+
+    # load meta data
+    with open(os.path.join(path_to_data, "info.txt")) as json_file:
+        meta_info = json.load(json_file)
+
+    # load gestures labels, subject labels
+    y_g = np.load(os.path.join(path_to_data, "split/y_g_train.npy"))
+
+    for wl in range(3000, 3001, 400):
+        wli = wl * 0.001
+        for wi in range(100, 200, 100):
+            wii = wi * 0.001
+
+            # load features
+            features = np.load(os.path.join(
+                path_to_data, "FA_data/features_train_{}_{}.npy".format(round(wli, 2), round(wii, 2))))
+
+            # load feature labels
+            with open(os.path.join(path_to_data, "FA_data/feature_labels_train_{}_{}.txt".format(round(wli, 2), round(wii, 2))), 'r') as f:
+                feature_labels = [line.rstrip('\n') for line in f]
+            print(feature_labels)
+
+            # for i, f in enumerate(feature_labels):
+            #     print(f, "features[i, :, 0]", features[i, :, 0])
+            #     print(f, "features[i, :, 1]", features[i, :, 1])
+            #     print(f, "features[i, :, 2]", features[i, :, 2])
+
+            features = np.nan_to_num(features)
+
+            # format gesture labels
+            n_windows = features.shape[1] / y_g.shape[0]
+            y_g_w = np.repeat(y_g, n_windows)
+
+            # save dataframe to
+            dataframe_save = os.path.join(
+                path_to_data, "FA_results/feature_analysis_{}_{}.csv".format(round(wli, 2), round(wii, 2)))
+            perform_feature_evaluation(
+                features, feature_labels, y_g_w, meta_info["num_gestures"], dataframe_save)
