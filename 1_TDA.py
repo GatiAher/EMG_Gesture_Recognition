@@ -198,10 +198,13 @@ if __name__ == "__main__":
                            ]
 
     # run topographic analysis
-    NR = 2
-    PO = 0.5
-    n_clusters = 5
-    save_string = os.path.join(
-        path_to_data, "TDA_results/TDA_{}_{}_{}".format(NR, PO, n_clusters))
-    perform_TDA(features_reshape, feature_labels, NR, PO, n_clusters,
-                save_string=save_string, title=save_string, color_values=color_values, color_function_name=color_function_name)
+    for nr in range(6, 9, 2):
+        NR = nr
+        for po in range(50, 101, 20):
+            PO = po / 100.0
+            for n in range(2, 5):
+                n_clusters = n
+                save_string = os.path.join(
+                    path_to_data, "TDA_results/TDA_{}_{}_{}".format(NR, PO, n_clusters))
+                perform_TDA(features_reshape, feature_labels, NR, PO, n_clusters,
+                            save_string=save_string, title=save_string, color_values=color_values, color_function_name=color_function_name)

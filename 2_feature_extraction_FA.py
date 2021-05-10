@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # window_len = 0.2  # seconds
     # window_incr = 0.1  # seconds
 
-    for wl in range(3000, 3001, 400):
+    for wl in range(200, 3001, 400):
         wli = wl * 0.001
         for wi in range(100, 200, 200):
             wii = wi * 0.001
