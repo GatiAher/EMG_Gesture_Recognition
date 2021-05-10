@@ -1,0 +1,378 @@
+mkdir -p data/junipersun/FA_data
+python3 2_feature_extraction_FA.py
+perform feature extraction: train
+number of analysis segments: 1
+window 0/1
+	processing segment 0/150
+	processing segment 1/150
+	processing segment 2/150
+	processing segment 3/150
+	processing segment 4/150
+	processing segment 5/150
+	processing segment 6/150
+	processing segment 7/150
+	processing segment 8/150
+	processing segment 9/150
+	processing segment 10/150
+	processing segment 11/150
+	processing segment 12/150
+	processing segment 13/150
+	processing segment 14/150
+	processing segment 15/150
+	processing segment 16/150
+	processing segment 17/150
+	processing segment 18/150
+	processing segment 19/150
+	processing segment 20/150
+	processing segment 21/150
+	processing segment 22/150
+	processing segment 23/150
+	processing segment 24/150
+	processing segment 25/150
+	processing segment 26/150
+	processing segment 27/150
+	processing segment 28/150
+	processing segment 29/150
+	processing segment 30/150
+	processing segment 31/150
+	processing segment 32/150
+	processing segment 33/150
+	processing segment 34/150
+	processing segment 35/150
+	processing segment 36/150
+	processing segment 37/150
+	processing segment 38/150
+	processing segment 39/150
+	processing segment 40/150
+	processing segment 41/150
+	processing segment 42/150
+	processing segment 43/150
+	processing segment 44/150
+	processing segment 45/150
+	processing segment 46/150
+	processing segment 47/150
+	processing segment 48/150
+	processing segment 49/150
+	processing segment 50/150
+	processing segment 51/150
+	processing segment 52/150
+	processing segment 53/150
+	processing segment 54/150
+	processing segment 55/150
+	processing segment 56/150
+	processing segment 57/150
+	processing segment 58/150
+	processing segment 59/150
+	processing segment 60/150
+	processing segment 61/150
+	processing segment 62/150
+	processing segment 63/150
+	processing segment 64/150
+	processing segment 65/150
+	processing segment 66/150
+	processing segment 67/150
+	processing segment 68/150
+	processing segment 69/150
+	processing segment 70/150
+	processing segment 71/150
+	processing segment 72/150
+	processing segment 73/150
+	processing segment 74/150
+	processing segment 75/150
+	processing segment 76/150
+	processing segment 77/150
+	processing segment 78/150
+	processing segment 79/150
+	processing segment 80/150
+	processing segment 81/150
+	processing segment 82/150
+	processing segment 83/150
+	processing segment 84/150
+	processing segment 85/150
+	processing segment 86/150
+	processing segment 87/150
+	processing segment 88/150
+	processing segment 89/150
+	processing segment 90/150
+	processing segment 91/150
+	processing segment 92/150
+	processing segment 93/150
+	processing segment 94/150
+	processing segment 95/150
+	processing segment 96/150
+	processing segment 97/150
+	processing segment 98/150
+	processing segment 99/150
+	processing segment 100/150
+	processing segment 101/150
+	processing segment 102/150
+	processing segment 103/150
+	processing segment 104/150
+	processing segment 105/150
+	processing segment 106/150
+	processing segment 107/150
+	processing segment 108/150
+	processing segment 109/150
+	processing segment 110/150
+	processing segment 111/150
+	processing segment 112/150
+	processing segment 113/150
+	processing segment 114/150
+	processing segment 115/150
+	processing segment 116/150
+	processing segment 117/150
+	processing segment 118/150
+	processing segment 119/150
+	processing segment 120/150
+	processing segment 121/150
+	processing segment 122/150
+	processing segment 123/150
+	processing segment 124/150
+	processing segment 125/150
+	processing segment 126/150
+	processing segment 127/150
+	processing segment 128/150
+	processing segment 129/150
+	processing segment 130/150
+	processing segment 131/150
+	processing segment 132/150
+	processing segment 133/150
+	processing segment 134/150
+	processing segment 135/150
+	processing segment 136/150
+	processing segment 137/150
+	processing segment 138/150
+	processing segment 139/150
+	processing segment 140/150
+	processing segment 141/150
+	processing segment 142/150
+	processing segment 143/150
+	processing segment 144/150
+	processing segment 145/150
+	processing segment 146/150
+	processing segment 147/150
+	processing segment 148/150
+	processing segment 149/150
+features.shape (43, 150, 3)
+***n_windows:  1
+saved features to  data/junipersun/FA_data/features_train_3.0_0.1.npy shape (43, 150, 3)
+saved feature labels to  data/junipersun/FA_data/feature_labels_train_3.0_0.1.txt len 43
+perform feature extraction: test
+number of analysis segments: 1
+window 0/1
+	processing segment 0/30
+	processing segment 1/30
+	processing segment 2/30
+	processing segment 3/30
+	processing segment 4/30
+	processing segment 5/30
+	processing segment 6/30
+	processing segment 7/30
+	processing segment 8/30
+	processing segment 9/30
+	processing segment 10/30
+	processing segment 11/30
+	processing segment 12/30
+	processing segment 13/30
+	processing segment 14/30
+	processing segment 15/30
+	processing segment 16/30
+	processing segment 17/30
+	processing segment 18/30
+	processing segment 19/30
+	processing segment 20/30
+	processing segment 21/30
+	processing segment 22/30
+	processing segment 23/30
+	processing segment 24/30
+	processing segment 25/30
+	processing segment 26/30
+	processing segment 27/30
+	processing segment 28/30
+	processing segment 29/30
+features.shape (43, 30, 3)
+***n_windows:  1
+saved features to  data/junipersun/FA_data/features_test_3.0_0.1.npy shape (43, 30, 3)
+saved feature labels to  data/junipersun/FA_data/feature_labels_test_3.0_0.1.txt len 43
+mkdir -p data/junipersun/FA_results
+python3 2_FA.py
+['SampEn(1)', 'SampEn(2)', 'SampEn(3)', 'IQR(start)', 'IQR(end)', 'HIST(1)', 'HIST(2)', 'HIST(3)', 'DAR(2)', 'DAR(3)', 'DAR(4)', 'DAR(5)', 'AR(2)', 'AR(3)', 'AR(4)', 'AR(5)', 'CC(2)', 'CC(3)', 'CC(4)', 'CC(5)', 'BC', 'DASDV', 'HP_A', 'HP_M', 'HP_C', 'IEMG', 'KURT', 'SKEW', 'LD', 'MAV', 'MMAV1', 'MMAV2', 'MFL', 'MNF', 'MNP', 'RMS', 'SM', 'SSI', 'STD', 'TM', 'TTP', 'VAR', 'WL']
+                  DBI      FLDI LDA_avg LDA_std LDA_max SVM_avg SVM_std SVM_max
+SampEn(1)    4.831403  0.067269     NaN     NaN     NaN     NaN     NaN     NaN
+SampEn(2)    4.562003  0.124205     NaN     NaN     NaN     NaN     NaN     NaN
+SampEn(3)    3.793728  0.098605     NaN     NaN     NaN     NaN     NaN     NaN
+IQR(start)  11.374397   1.10342     NaN     NaN     NaN     NaN     NaN     NaN
+IQR(end)    10.595595  1.066397     NaN     NaN     NaN     NaN     NaN     NaN
+HIST(1)      6.489748  0.246237     NaN     NaN     NaN     NaN     NaN     NaN
+HIST(2)      6.125497   0.15664     NaN     NaN     NaN     NaN     NaN     NaN
+HIST(3)     12.045451  0.068274     NaN     NaN     NaN     NaN     NaN     NaN
+DAR(2)       4.358442  0.076753     NaN     NaN     NaN     NaN     NaN     NaN
+DAR(3)      12.910074  0.534897     NaN     NaN     NaN     NaN     NaN     NaN
+DAR(4)      11.100369  0.352661     NaN     NaN     NaN     NaN     NaN     NaN
+DAR(5)      37.721652   1.45914     NaN     NaN     NaN     NaN     NaN     NaN
+AR(2)       29.731967  0.493374     NaN     NaN     NaN     NaN     NaN     NaN
+AR(3)        9.808917  0.378217     NaN     NaN     NaN     NaN     NaN     NaN
+AR(4)        9.431319  0.441389     NaN     NaN     NaN     NaN     NaN     NaN
+AR(5)       13.765828  0.247132     NaN     NaN     NaN     NaN     NaN     NaN
+CC(2)       29.731967  0.493374     NaN     NaN     NaN     NaN     NaN     NaN
+CC(3)        9.603924  0.371198     NaN     NaN     NaN     NaN     NaN     NaN
+CC(4)       20.403186  0.957463     NaN     NaN     NaN     NaN     NaN     NaN
+CC(5)       11.805126  0.626527     NaN     NaN     NaN     NaN     NaN     NaN
+BC           5.275558   0.13156     NaN     NaN     NaN     NaN     NaN     NaN
+DASDV         5.06489  0.125975     NaN     NaN     NaN     NaN     NaN     NaN
+HP_A         4.124073  0.081919     NaN     NaN     NaN     NaN     NaN     NaN
+HP_M         7.175876  0.086294     NaN     NaN     NaN     NaN     NaN     NaN
+HP_C        11.003722  0.069118     NaN     NaN     NaN     NaN     NaN     NaN
+IEMG         7.885929  0.199905     NaN     NaN     NaN     NaN     NaN     NaN
+KURT         3.956369  0.066667     NaN     NaN     NaN     NaN     NaN     NaN
+SKEW         4.222362  0.101313     NaN     NaN     NaN     NaN     NaN     NaN
+LD           7.900214  0.471471     NaN     NaN     NaN     NaN     NaN     NaN
+MAV          7.885928  0.199905     NaN     NaN     NaN     NaN     NaN     NaN
+MMAV1        9.607155   0.33517     NaN     NaN     NaN     NaN     NaN     NaN
+MMAV2       10.440533  0.566036     NaN     NaN     NaN     NaN     NaN     NaN
+MFL           5.05671  0.119648     NaN     NaN     NaN     NaN     NaN     NaN
+MNF         13.659154  0.403778     NaN     NaN     NaN     NaN     NaN     NaN
+MNP          5.494665  0.218776     NaN     NaN     NaN     NaN     NaN     NaN
+RMS          5.042464   0.11394     NaN     NaN     NaN     NaN     NaN     NaN
+SM           4.877342  0.159385     NaN     NaN     NaN     NaN     NaN     NaN
+SSI          4.908415  0.138335     NaN     NaN     NaN     NaN     NaN     NaN
+STD          4.119192  0.072063     NaN     NaN     NaN     NaN     NaN     NaN
+TM           6.246342  0.287095     NaN     NaN     NaN     NaN     NaN     NaN
+TTP          5.494665  0.218776     NaN     NaN     NaN     NaN     NaN     NaN
+VAR          4.124073  0.081919     NaN     NaN     NaN     NaN     NaN     NaN
+WL           5.015875  0.134298     NaN     NaN     NaN     NaN     NaN     NaN
+                  DBI      FLDI   LDA_avg  ... SVM_avg SVM_std SVM_max
+SampEn(1)    4.831403  0.067269      0.56  ...     NaN     NaN     NaN
+SampEn(2)    4.562003  0.124205  0.566667  ...     NaN     NaN     NaN
+SampEn(3)    3.793728  0.098605      0.58  ...     NaN     NaN     NaN
+IQR(start)  11.374397   1.10342  0.486667  ...     NaN     NaN     NaN
+IQR(end)    10.595595  1.066397  0.506667  ...     NaN     NaN     NaN
+HIST(1)      6.489748  0.246237  0.406667  ...     NaN     NaN     NaN
+HIST(2)      6.125497   0.15664  0.453333  ...     NaN     NaN     NaN
+HIST(3)     12.045451  0.068274      0.46  ...     NaN     NaN     NaN
+DAR(2)       4.358442  0.076753  0.493333  ...     NaN     NaN     NaN
+DAR(3)      12.910074  0.534897      0.32  ...     NaN     NaN     NaN
+DAR(4)      11.100369  0.352661  0.373333  ...     NaN     NaN     NaN
+DAR(5)      37.721652   1.45914  0.246667  ...     NaN     NaN     NaN
+AR(2)       29.731967  0.493374  0.346667  ...     NaN     NaN     NaN
+AR(3)        9.808917  0.378217       0.4  ...     NaN     NaN     NaN
+AR(4)        9.431319  0.441389      0.38  ...     NaN     NaN     NaN
+AR(5)       13.765828  0.247132       0.4  ...     NaN     NaN     NaN
+CC(2)       29.731967  0.493374  0.346667  ...     NaN     NaN     NaN
+CC(3)        9.603924  0.371198       0.4  ...     NaN     NaN     NaN
+CC(4)       20.403186  0.957463  0.313333  ...     NaN     NaN     NaN
+CC(5)       11.805126  0.626527       0.3  ...     NaN     NaN     NaN
+BC           5.275558   0.13156  0.613333  ...     NaN     NaN     NaN
+DASDV         5.06489  0.125975      0.58  ...     NaN     NaN     NaN
+HP_A         4.124073  0.081919  0.633333  ...     NaN     NaN     NaN
+HP_M         7.175876  0.086294  0.486667  ...     NaN     NaN     NaN
+HP_C        11.003722  0.069118  0.513333  ...     NaN     NaN     NaN
+IEMG         7.885929  0.199905      0.46  ...     NaN     NaN     NaN
+KURT         3.956369  0.066667  0.513333  ...     NaN     NaN     NaN
+SKEW         4.222362  0.101313  0.506667  ...     NaN     NaN     NaN
+LD           7.900214  0.471471  0.426667  ...     NaN     NaN     NaN
+MAV          7.885928  0.199905      0.46  ...     NaN     NaN     NaN
+MMAV1        9.607155   0.33517      0.44  ...     NaN     NaN     NaN
+MMAV2       10.440533  0.566036  0.406667  ...     NaN     NaN     NaN
+MFL           5.05671  0.119648  0.593333  ...     NaN     NaN     NaN
+MNF         13.659154  0.403778      0.38  ...     NaN     NaN     NaN
+MNP          5.494665  0.218776  0.446667  ...     NaN     NaN     NaN
+RMS          5.042464   0.11394      0.54  ...     NaN     NaN     NaN
+SM           4.877342  0.159385  0.533333  ...     NaN     NaN     NaN
+SSI          4.908415  0.138335  0.546667  ...     NaN     NaN     NaN
+STD          4.119192  0.072063      0.66  ...     NaN     NaN     NaN
+TM           6.246342  0.287095      0.48  ...     NaN     NaN     NaN
+TTP          5.494665  0.218776  0.446667  ...     NaN     NaN     NaN
+VAR          4.124073  0.081919  0.633333  ...     NaN     NaN     NaN
+WL           5.015875  0.134298  0.593333  ...     NaN     NaN     NaN
+
+[43 rows x 8 columns]
+on feature SampEn(1)
+on feature SampEn(2)
+on feature SampEn(3)
+on feature IQR(start)
+on feature IQR(end)
+on feature HIST(1)
+on feature HIST(2)
+on feature HIST(3)
+on feature DAR(2)
+on feature DAR(3)
+on feature DAR(4)
+on feature DAR(5)
+on feature AR(2)
+on feature AR(3)
+on feature AR(4)
+on feature AR(5)
+on feature CC(2)
+on feature CC(3)
+on feature CC(4)
+on feature CC(5)
+on feature BC
+on feature DASDV
+on feature HP_A
+on feature HP_M
+on feature HP_C
+on feature IEMG
+on feature KURT
+on feature SKEW
+on feature LD
+on feature MAV
+on feature MMAV1
+on feature MMAV2
+on feature MFL
+on feature MNF
+on feature MNP
+on feature RMS
+on feature SM
+on feature SSI
+on feature STD
+on feature TM
+on feature TTP
+on feature VAR
+on feature WL
+                  DBI      FLDI   LDA_avg  ...   SVM_avg   SVM_std   SVM_max
+SampEn(1)    4.831403  0.067269      0.56  ...  0.553333  0.088443       0.7
+SampEn(2)    4.562003  0.124205  0.566667  ...  0.566667  0.091894  0.633333
+SampEn(3)    3.793728  0.098605      0.58  ...  0.566667  0.128236       0.7
+IQR(start)  11.374397   1.10342  0.486667  ...      0.42  0.080554  0.566667
+IQR(end)    10.595595  1.066397  0.506667  ...  0.473333  0.074237  0.533333
+HIST(1)      6.489748  0.246237  0.406667  ...  0.406667  0.064636  0.466667
+HIST(2)      6.125497   0.15664  0.453333  ...  0.426667  0.067987       0.5
+HIST(3)     12.045451  0.068274      0.46  ...  0.466667  0.089443  0.566667
+DAR(2)       4.358442  0.076753  0.493333  ...  0.533333  0.101105  0.666667
+DAR(3)      12.910074  0.534897      0.32  ...      0.32  0.085894  0.433333
+DAR(4)      11.100369  0.352661  0.373333  ...      0.36  0.024944       0.4
+DAR(5)      37.721652   1.45914  0.246667  ...  0.233333  0.029814  0.266667
+AR(2)       29.731967  0.493374  0.346667  ...  0.346667  0.077746  0.466667
+AR(3)        9.808917  0.378217       0.4  ...      0.38  0.045216  0.466667
+AR(4)        9.431319  0.441389      0.38  ...  0.346667   0.06532  0.466667
+AR(5)       13.765828  0.247132       0.4  ...       0.4  0.042164  0.433333
+CC(2)       29.731967  0.493374  0.346667  ...  0.346667  0.077746  0.466667
+CC(3)        9.603924  0.371198       0.4  ...  0.373333  0.074237       0.5
+CC(4)       20.403186  0.957463  0.313333  ...  0.333333  0.021082  0.366667
+CC(5)       11.805126  0.626527       0.3  ...  0.333333   0.04714       0.4
+BC           5.275558   0.13156  0.613333  ...  0.573333  0.082731  0.666667
+DASDV         5.06489  0.125975      0.58  ...  0.573333  0.087939       0.7
+HP_A         4.124073  0.081919  0.633333  ...  0.686667  0.074833       0.8
+HP_M         7.175876  0.086294  0.486667  ...  0.493333  0.044222  0.566667
+HP_C        11.003722  0.069118  0.513333  ...  0.493333  0.095219  0.633333
+IEMG         7.885929  0.199905      0.46  ...       0.5  0.086923  0.633333
+KURT         3.956369  0.066667  0.513333  ...  0.506667  0.053333  0.566667
+SKEW         4.222362  0.101313  0.506667  ...  0.513333  0.068638       0.6
+LD           7.900214  0.471471  0.426667  ...  0.413333  0.083267  0.566667
+MAV          7.885928  0.199905      0.46  ...       0.5  0.086923  0.633333
+MMAV1        9.607155   0.33517      0.44  ...  0.433333   0.07303  0.533333
+MMAV2       10.440533  0.566036  0.406667  ...  0.426667  0.024944  0.466667
+MFL           5.05671  0.119648  0.593333  ...  0.606667  0.085375  0.733333
+MNF         13.659154  0.403778      0.38  ...       0.4  0.086923  0.566667
+MNP          5.494665  0.218776  0.446667  ...  0.473333  0.090431       0.6
+RMS          5.042464   0.11394      0.54  ...      0.54  0.104137  0.733333
+SM           4.877342  0.159385  0.533333  ...      0.54  0.095219  0.666667
+SSI          4.908415  0.138335  0.546667  ...  0.553333   0.06532  0.666667
+STD          4.119192  0.072063      0.66  ...       0.7  0.098883  0.833333
+TM           6.246342  0.287095      0.48  ...  0.446667  0.116619       0.6
+TTP          5.494665  0.218776  0.446667  ...  0.473333  0.090431       0.6
+VAR          4.124073  0.081919  0.633333  ...  0.686667  0.074833       0.8
+WL           5.015875  0.134298  0.593333  ...  0.546667  0.068638  0.633333
+
+[43 rows x 8 columns]

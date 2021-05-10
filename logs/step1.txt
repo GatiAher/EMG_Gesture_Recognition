@@ -1,0 +1,180 @@
+mkdir -p data/junipersun/TDA_data
+python3 1_feature_extraction_TDA.py
+	processing segment 0/150
+	processing segment 1/150
+	processing segment 2/150
+	processing segment 3/150
+	processing segment 4/150
+	processing segment 5/150
+	processing segment 6/150
+	processing segment 7/150
+	processing segment 8/150
+	processing segment 9/150
+	processing segment 10/150
+	processing segment 11/150
+	processing segment 12/150
+	processing segment 13/150
+	processing segment 14/150
+	processing segment 15/150
+	processing segment 16/150
+	processing segment 17/150
+	processing segment 18/150
+	processing segment 19/150
+	processing segment 20/150
+	processing segment 21/150
+	processing segment 22/150
+	processing segment 23/150
+	processing segment 24/150
+	processing segment 25/150
+	processing segment 26/150
+	processing segment 27/150
+	processing segment 28/150
+	processing segment 29/150
+	processing segment 30/150
+	processing segment 31/150
+	processing segment 32/150
+	processing segment 33/150
+	processing segment 34/150
+	processing segment 35/150
+	processing segment 36/150
+	processing segment 37/150
+	processing segment 38/150
+	processing segment 39/150
+	processing segment 40/150
+	processing segment 41/150
+	processing segment 42/150
+	processing segment 43/150
+	processing segment 44/150
+	processing segment 45/150
+	processing segment 46/150
+	processing segment 47/150
+	processing segment 48/150
+	processing segment 49/150
+	processing segment 50/150
+	processing segment 51/150
+	processing segment 52/150
+	processing segment 53/150
+	processing segment 54/150
+	processing segment 55/150
+	processing segment 56/150
+	processing segment 57/150
+	processing segment 58/150
+	processing segment 59/150
+	processing segment 60/150
+	processing segment 61/150
+	processing segment 62/150
+	processing segment 63/150
+	processing segment 64/150
+	processing segment 65/150
+	processing segment 66/150
+	processing segment 67/150
+	processing segment 68/150
+	processing segment 69/150
+	processing segment 70/150
+	processing segment 71/150
+	processing segment 72/150
+	processing segment 73/150
+	processing segment 74/150
+	processing segment 75/150
+	processing segment 76/150
+	processing segment 77/150
+	processing segment 78/150
+	processing segment 79/150
+	processing segment 80/150
+	processing segment 81/150
+	processing segment 82/150
+	processing segment 83/150
+	processing segment 84/150
+	processing segment 85/150
+	processing segment 86/150
+	processing segment 87/150
+	processing segment 88/150
+	processing segment 89/150
+	processing segment 90/150
+	processing segment 91/150
+	processing segment 92/150
+	processing segment 93/150
+	processing segment 94/150
+	processing segment 95/150
+	processing segment 96/150
+	processing segment 97/150
+	processing segment 98/150
+	processing segment 99/150
+	processing segment 100/150
+	processing segment 101/150
+	processing segment 102/150
+	processing segment 103/150
+	processing segment 104/150
+	processing segment 105/150
+	processing segment 106/150
+	processing segment 107/150
+	processing segment 108/150
+	processing segment 109/150
+	processing segment 110/150
+	processing segment 111/150
+	processing segment 112/150
+	processing segment 113/150
+	processing segment 114/150
+	processing segment 115/150
+	processing segment 116/150
+	processing segment 117/150
+	processing segment 118/150
+	processing segment 119/150
+	processing segment 120/150
+	processing segment 121/150
+	processing segment 122/150
+	processing segment 123/150
+	processing segment 124/150
+	processing segment 125/150
+	processing segment 126/150
+	processing segment 127/150
+	processing segment 128/150
+	processing segment 129/150
+	processing segment 130/150
+	processing segment 131/150
+	processing segment 132/150
+	processing segment 133/150
+	processing segment 134/150
+	processing segment 135/150
+	processing segment 136/150
+	processing segment 137/150
+	processing segment 138/150
+	processing segment 139/150
+	processing segment 140/150
+	processing segment 141/150
+	processing segment 142/150
+	processing segment 143/150
+	processing segment 144/150
+	processing segment 145/150
+	processing segment 146/150
+	processing segment 147/150
+	processing segment 148/150
+	processing segment 149/150
+features.shape (43, 150, 3)
+features.shape (43, 150, 3)
+saved features to  data/junipersun/TDA_data/features_train.npy shape (43, 150, 3)
+saved feature labels to  data/junipersun/TDA_data/feature_labels_train.txt len 43
+mkdir -p data/junipersun/TDA_results
+python3 1_TDA.py
+features_reshape.shape (43, 450)
+['SampEn(1)', 'SampEn(2)', 'SampEn(3)', 'IQR(start)', 'IQR(end)', 'HIST(1)', 'HIST(2)', 'HIST(3)', 'DAR(2)', 'DAR(3)', 'DAR(4)', 'DAR(5)', 'AR(2)', 'AR(3)', 'AR(4)', 'AR(5)', 'CC(2)', 'CC(3)', 'CC(4)', 'CC(5)', 'BC', 'DASDV', 'HP_A', 'HP_M', 'HP_C', 'IEMG', 'KURT', 'SKEW', 'LD', 'MAV', 'MMAV1', 'MMAV2', 'MFL', 'MNF', 'MNP', 'RMS', 'SM', 'SSI', 'STD', 'TM', 'TTP', 'VAR', 'WL']
+KeplerMapper(verbose=2)
+..Composing projection pipeline of length 1:
+	Projections: knn_distance_2
+	Distance matrices: False
+	Scalers: MinMaxScaler()
+..Projecting on data shaped (43, 450)
+
+..Projecting data using: knn_distance_2
+
+..Scaling with: MinMaxScaler()
+
+Mapping on data shaped (43, 450) using lens shaped (43, 1)
+
+Minimal points in hypercube before clustering: 5
+Creating 2 hypercubes.
+   > Found 5 clusters in hypercube 0.
+   > Found 5 clusters in hypercube 1.
+
+Created 7 edges and 10 nodes in 0:00:00.004578.
+Wrote visualization to: data/junipersun/TDA_results/TDA_2_0.5_5.html
