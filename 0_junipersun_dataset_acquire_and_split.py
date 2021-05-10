@@ -63,17 +63,18 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(
         X, labels_gestures, stratify=labels_gestures, test_size=30, random_state=RAND_SEED)
 
-    # mean center the data, by channel
+    # mean center the data (calculate average offset across all the trials in the training set, for each channel)
     X_train_mean = np.mean(X_train, axis=(0, 1)).reshape((1, 1, -1))
+    # use it to mean center train and test sets
     X_train = np.subtract(X_train, X_train_mean)
     X_test = np.subtract(X_test, X_train_mean)
 
     # verify data has right dimensions
     print("X_train.shape", X_train.shape, "y_train.shape", y_train.shape)
-    print("train: # of each gesture", np.bincount(y_train[:, 0]))
+    print("train: # of each gesture", np.bincount(np.squeeze(y_train)))
     print()
     print("X_test.shape", X_test.shape, "y_test.shape", y_test.shape)
-    print("test: # of each gesture", np.bincount(y_test[:, 0]))
+    print("test: # of each gesture", np.bincount(np.squeeze(y_test)))
     print()
 
     # save dataset
