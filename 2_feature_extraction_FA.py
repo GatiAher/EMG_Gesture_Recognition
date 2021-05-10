@@ -77,7 +77,9 @@ if __name__ == "__main__":
         wli = wl * 0.001
         for wi in range(100, 200, 200):
             wii = wi * 0.001
+            print("perform feature extraction: train")
             perform_feature_extraction(
                 X, meta_info['sampling_rate'], wli, wii, path_to_data)
+            print("perform feature extraction: test")
             perform_feature_extraction(
                 X_test, meta_info['sampling_rate'], wli, wii, path_to_data, "test")
