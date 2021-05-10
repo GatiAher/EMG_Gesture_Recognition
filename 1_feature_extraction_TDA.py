@@ -44,19 +44,14 @@ if __name__ == "__main__":
     feature_mean = np.mean(features, axis=1).reshape(
         (features.shape[0], 1, -1))
     feature_std = np.std(features, axis=1).reshape((features.shape[0], 1, -1))
-    features_scaled = np.subtract(features, feature_mean) / feature_std
-
-    # reshape array to be two-dimensional
-    features_reshape = features_scaled.reshape((features.shape[0], -1))
-    print("features_reshape.shape", features_reshape.shape)
+    features = np.subtract(features, feature_mean) / feature_std
 
     # save feature files
     feature_train_save = os.path.join(
         path_to_data, "TDA_data/features_train.npy")
-    np.save(feature_train_save,
-            features_reshape)
+    np.save(feature_train_save, features)
     print("saved features to ", feature_train_save,
-          "shape", features_reshape.shape)
+          "shape", features.shape)
 
     feature_train_labels_save = os.path.join(
         path_to_data, "TDA_data/feature_labels_train.txt")
@@ -66,4 +61,3 @@ if __name__ == "__main__":
             f.write('\n')
     print("saved feature labels to ",
           feature_train_labels_save, "len", len(feature_labels))
-
