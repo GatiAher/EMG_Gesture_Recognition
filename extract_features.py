@@ -730,7 +730,7 @@ def extract_features(data, only_return_labels=False, verbose=False, drop_constan
     # (n x c x f)
     res = []
     for n in range(data_r.shape[0]):
-        print("\tfinished {}/{}".format(n, data_r.shape[0]))
+        print("\tprocessing segment {}/{}".format(n, data_r.shape[0]))
         n_arr = []
         for c in range(data_r.shape[1]):
             c_arr = []
@@ -852,8 +852,8 @@ def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose
     # sliding windows
     i = 0
     w = 0
+    s = 0  # start at the front
     for e in range(window_span, X.shape[1] + 1, window_incr):
-        s = e - window_incr
         print("window {}/{}".format(w, n_windows))
         fm, _ = extract_features(X[:, s:e, :])
         features[:, i:i+fm.shape[1], :] = fm
@@ -863,8 +863,9 @@ def moving_window(X, sampling_rate_Hz, window_span_sec, window_incr_sec, verbose
                 for c in range(fm.shape[2]):
                     print(flabel + str(c), np.mean(features[f, i:i+X.shape[0], c]),
                           np.std(features[f, i:i+X.shape[0], c]))
-        w += 1
         i += X.shape[0]
+        w += 1
+        s += window_incr
 
     # replace nans
     np.nan_to_num(features, copy=False)
